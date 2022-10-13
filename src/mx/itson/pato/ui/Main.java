@@ -8,6 +8,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import javax.swing.JFileChooser;
+import mx.itson.pato.entidades.Video;
 
 /**
  *
@@ -81,6 +82,8 @@ public class Main extends javax.swing.JFrame {
                 File archivo = fileChooser.getSelectedFile();
                 byte archivoBytes[] = Files.readAllBytes(archivo.toPath());
                 String contenido = new String(archivoBytes, StandardCharsets.UTF_8);
+                
+                Video video = new Video().deserializar(contenido);
                 
                 System.out.println(contenido);
                 

@@ -4,6 +4,7 @@
  */
 package mx.itson.pato.entidades;
 
+import com.google.gson.Gson;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,24 @@ public class Video {
     private Date fecha;
     private Usuario usuario;
     private List<Comentario> comentarios;
+    
+    public Video deserializar(String json){
+        
+        Video video = new Video();
+        
+        try{
+            
+            video = new Gson().fromJson(json, Video.class);
+            
+        }catch(Exception ex){
+            
+            System.err.print("siOcurrió un error: " + ex.getMessage());
+            
+        }
+        
+        return video;
+        
+    }
 
     public String getTitulo() {
         return titulo;
