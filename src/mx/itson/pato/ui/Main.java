@@ -8,6 +8,8 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import javax.swing.JFileChooser;
+import javax.swing.table.DefaultTableModel;
+import mx.itson.pato.entidades.Comentario;
 import mx.itson.pato.entidades.Video;
 
 /**
@@ -34,6 +36,11 @@ public class Main extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         btnBuscar = new javax.swing.JButton();
+        lblTitulo = new javax.swing.JLabel();
+        lblDescripcion = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblComentarios = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,6 +53,40 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        lblTitulo.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lblTitulo.setText("Título");
+
+        lblDescripcion.setText("Descripción");
+
+        tblComentarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Fecha", "Usuario", "Comentario"
+            }
+        ));
+        jScrollPane1.setViewportView(tblComentarios);
+        if (tblComentarios.getColumnModel().getColumnCount() > 0) {
+            tblComentarios.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 345, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -53,9 +94,16 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(btnBuscar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1145, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(btnBuscar)
+                            .addComponent(lblTitulo)
+                            .addComponent(lblDescripcion))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -64,7 +112,15 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBuscar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblDescripcion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -85,7 +141,20 @@ public class Main extends javax.swing.JFrame {
                 
                 Video video = new Video().deserializar(contenido);
                 
-                System.out.println(contenido);
+                lblTitulo.setText(video.getTitulo());
+                lblDescripcion.setText(video.getDescripcion());
+                
+                DefaultTableModel modelo = (DefaultTableModel) tblComentarios.getModel();
+                
+                modelo.setRowCount(0);
+                
+                for(Comentario c : video.getComentarios()){
+                    
+                    modelo.addRow(new Object[] {c.getFecha(), c.getAutor().getNombre(), c.getContenido()});
+                    
+                }
+                
+                //System.out.println(contenido);
                 
             }
            
@@ -135,5 +204,10 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JTable tblComentarios;
     // End of variables declaration//GEN-END:variables
 }
