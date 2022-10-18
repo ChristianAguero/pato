@@ -7,6 +7,8 @@ package mx.itson.pato.ui;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.pato.entidades.Comentario;
@@ -41,6 +43,8 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblComentarios = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
+        lblFechaPublicacion = new javax.swing.JLabel();
+        lblUsuario = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -85,8 +89,12 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 345, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        lblFechaPublicacion.setText("Fecha de publicación");
+
+        lblUsuario.setText("Usuario");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,8 +110,13 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(btnBuscar)
                             .addComponent(lblTitulo)
                             .addComponent(lblDescripcion)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 425, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblFechaPublicacion)
+                                    .addComponent(lblUsuario))))
+                        .addGap(0, 308, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,7 +131,13 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDescripcion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 309, Short.MAX_VALUE)
+                        .addComponent(lblUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblFechaPublicacion)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -139,19 +158,21 @@ public class Main extends javax.swing.JFrame {
                 File archivo = fileChooser.getSelectedFile();
                 byte archivoBytes[] = Files.readAllBytes(archivo.toPath());
                 String contenido = new String(archivoBytes, StandardCharsets.UTF_8);
+                DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 
                 Video video = new Video().deserializar(contenido);
                 
                 lblTitulo.setText(video.getTitulo());
                 lblDescripcion.setText(video.getDescripcion());
+                lblFechaPublicacion.setText(formato.format(video.getFecha()));
+                lblUsuario.setText(video.getUsuario().getNombre());
                 
                 DefaultTableModel modelo = (DefaultTableModel) tblComentarios.getModel();
-                
                 modelo.setRowCount(0);
                 
                 for(Comentario c : video.getComentarios()){
                     
-                    modelo.addRow(new Object[] {c.getFecha(), c.getAutor().getNombre(), c.getContenido()});
+                    modelo.addRow(new Object[] {formato.format(c.getFecha()), c.getAutor().getNombre(), c.getContenido()});
                     
                 }
                 
@@ -208,7 +229,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblFechaPublicacion;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JLabel lblUsuario;
     private javax.swing.JTable tblComentarios;
     // End of variables declaration//GEN-END:variables
 }
