@@ -20,6 +20,11 @@ public class Video {
     private Usuario usuario;
     private List<Comentario> comentarios;
     
+    /**
+     * Sirve para transformar un archivo json a objetos de java
+     * @param json es el archivo json transformado a binario
+     * @return el archivo ya transformado a objetos de java
+     */
     public Video deserializar(String json){
         
         Video video = new Video();
